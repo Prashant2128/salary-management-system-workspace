@@ -1,0 +1,14 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family: "Inter", "Roboto", "Helvetica", "Arial", sans-serif;
+  background-color: #f7f9fc;
+}
+
+#root {
+  min-height: 100vh;
+}

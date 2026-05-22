@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgres:16
+    container_name: salary-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: salary_user
+      POSTGRES_PASSWORD: salary_password
+      POSTGRES_DB: salary_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U salary_user -d salary_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./backend
+    profiles: ["full"]
+    environment:
+      DATABASE_URL: postgresql://salary_user:salary_password@db:5432/salary_db
+      DATABASE_URL_TEST: postgresql://salary_user:salary_password@db:5432/salary_db_test
+      PORT: 3001
+      NODE_ENV: production
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3001:3001"
+
+  web:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://localhost:3001/api
+    profiles: ["full"]
+    depends_on:
+      api:
+        condition: service_started
+    ports:
+      - "5173:80"
+
+volumes:
+  postgres_data:

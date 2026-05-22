@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.insightsRoutes = void 0;
+const express_1 = require("express");
+const insightsController_1 = require("../controllers/insightsController");
+const validate_1 = require("../middleware/validate");
+const employeeSchemas_1 = require("../validators/employeeSchemas");
+exports.insightsRoutes = (0, express_1.Router)();
+exports.insightsRoutes.get("/by-country", insightsController_1.insightsController.byCountry);
+exports.insightsRoutes.get("/by-country-and-title", (0, validate_1.validateQuery)(employeeSchemas_1.countryAndTitleQuerySchema), insightsController_1.insightsController.byCountryAndTitle);
+exports.insightsRoutes.get("/summary", insightsController_1.insightsController.summary);
+exports.insightsRoutes.get("/countries", insightsController_1.insightsController.countries);
+exports.insightsRoutes.get("/job-titles", (0, validate_1.validateQuery)(employeeSchemas_1.jobTitlesQuerySchema), insightsController_1.insightsController.jobTitles);

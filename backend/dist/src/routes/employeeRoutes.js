@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.employeeRoutes = void 0;
+const express_1 = require("express");
+const employeeController_1 = require("../controllers/employeeController");
+const validate_1 = require("../middleware/validate");
+const employeeSchemas_1 = require("../validators/employeeSchemas");
+exports.employeeRoutes = (0, express_1.Router)();
+exports.employeeRoutes.get("/", (0, validate_1.validateQuery)(employeeSchemas_1.employeeListQuerySchema), employeeController_1.employeeController.list);
+exports.employeeRoutes.get("/:id", (0, validate_1.validateParams)(employeeSchemas_1.employeeIdParamSchema), employeeController_1.employeeController.getById);
+exports.employeeRoutes.post("/", (0, validate_1.validateBody)(employeeSchemas_1.createEmployeeSchema), employeeController_1.employeeController.create);
+exports.employeeRoutes.put("/:id", (0, validate_1.validateParams)(employeeSchemas_1.employeeIdParamSchema), (0, validate_1.validateBody)(employeeSchemas_1.updateEmployeeSchema), employeeController_1.employeeController.update);
+exports.employeeRoutes.delete("/:id", (0, validate_1.validateParams)(employeeSchemas_1.employeeIdParamSchema), employeeController_1.employeeController.remove);
